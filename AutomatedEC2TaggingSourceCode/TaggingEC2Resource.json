@@ -1,0 +1,37 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "LaunchEC2Instances",
+            "Effect": "Allow",
+            "Action": [
+                "ec2:Describe*",
+                "ec2:RunInstances"
+            ],
+            "Resource": [
+                "*"
+            ]
+        },
+        {
+            "Sid": "AllowActionsIfYouBelongToAProject",
+            "Effect": "Allow",
+            "Action": [
+                "ec2:StopInstances",
+                "ec2:StartInstances",
+                "ec2:RebootInstances",
+                "ec2:TerminateInstances",
+                "ec2:AttachVolume",
+                "ec2:DetachVolume",
+                "ec2:DeleteVolume"
+            ],
+            "Condition": {
+                "StringEquals": {
+                    "ec2:ResourceTag/project": "${aws:PrincipalTag/project}"
+                }
+            },
+            "Resource": [
+                "*"
+            ]
+        }
+    ]
+}
