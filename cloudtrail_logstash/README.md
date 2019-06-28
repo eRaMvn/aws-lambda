@@ -1,5 +1,6 @@
-# Forwarding CloudTrail Logs to Elasticsearch
+# Forwarding CloudTrail Logs to Elasticsearch (Centralized Logging Approach With Multiple Accounts Using Logstash)
 
+* You are trying to send CloudTrail to Elasticsearch, but it seems like lambda function from cloudwatch log group or S3 event is the way to go
 * Have you ever had issues with the logging format of Cloudtrail when it is sent to S3? 
 * You have tried with logstash but the logging format is not right and you are using the filter something like this:
 ```
