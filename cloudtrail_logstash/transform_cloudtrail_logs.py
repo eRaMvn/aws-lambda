@@ -3,7 +3,21 @@ import boto3
 import gzip
 import os
 from io import BytesIO
+import functools
+import sys
 
+def log_event_on_error(handler):
+    @functools.wraps(handler)
+    def wrapper(event, context):
+        try:
+            return handler(event, context)
+        except Exception:
+            print('event = %r' % event)
+            raise
+
+    return wrapper
+
+@log_event_on_error
 def lambda_handler(event, context):
     
     s3 = boto3.client('s3')
@@ -35,10 +49,9 @@ def lambda_handler(event, context):
             f.write("%s\n" % json.dumps(item))
     
     #Format the output file name
-    file_name = "CloudtrailTransformed/" + gzip_key.split('.')[0].split('/')[-1] + ".json"
+    file_name = "CloudTrailTransformed/" + gzip_key.split('.')[0].split('/')[-1] + ".json"
     
     # Reupload the file to S3
-    s3_resource.Bucket(bucket).upload_file("/tmp/temp", file_name)
-    
+    s3_resource.Bucket(bucket).upload_file("/tmp/temp", file_name)    
     
     return "Done!"
